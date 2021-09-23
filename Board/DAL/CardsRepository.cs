@@ -36,7 +36,6 @@ namespace Board.DAL
 
         public Card Find(int id)
         {
-            UpdateJson();
             Card card = _cards.FirstOrDefault(x => x.Id == id);
             if (card == null)
             {
@@ -48,8 +47,6 @@ namespace Board.DAL
 
         public IEnumerable<Card> GetAll()
         {
-            UpdateJson();
-
             return _cards;
         }
 

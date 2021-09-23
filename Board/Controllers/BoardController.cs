@@ -12,26 +12,28 @@ namespace Board.Controllers
     [Route("[controller]")]
     public class BoardController : Controller
     {
-        CardsRepository repository;
+        ICardsRepository _repository;
+        readonly string _filePath = "DAL/cards.json";
 
         public BoardController()
         {
-            repository = new CardsRepository();
+            _repository = new CardsRepository(_filePath);
         }
 
 
         [HttpGet]
         public IEnumerable<Card> Get()
         {
-            return repository.GetAll();
+            return _repository.GetAll();
         }
 
         [HttpGet("{id}")]
         public ActionResult<Card> Get(int id)
         {
-            Card card = repository.Find(id);            
+            Card card = _repository.Find(id);            
             if (card == null)
                 return NotFound();
+            
             return new ObjectResult(card);
         }
 
@@ -43,7 +45,7 @@ namespace Board.Controllers
                 return BadRequest();
             }
 
-            repository.Add(card);
+            _repository.Add(card);
             return Ok();
         }
 
@@ -54,19 +56,19 @@ namespace Board.Controllers
             {
                 return BadRequest();
             }
-            if (!repository.GetAll().Any(x => x.Id == card.Id))
+            if (!_repository.GetAll().Any(x => x.Id == card.Id))
             {
                 return NotFound();
             }
 
-            repository.Update(card);
+            _repository.Update(card);
             return Ok();
         }
 
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
-            repository.Remove(id);
+            _repository.Remove(id);
             return Ok();
         }
     }
