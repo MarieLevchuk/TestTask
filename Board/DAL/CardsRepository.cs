@@ -10,15 +10,17 @@ namespace Board.DAL
 {
     public class CardsRepository : ICardsRepository
     {
-        List<Card> cards;
-
-        public CardsRepository()
+        List<Card> _cards;
+        JsonHelper _jhelper;
+        public CardsRepository(string filePath)
         {
-            using (StreamReader streamReader = new StreamReader("DAL/users.json"))
+            if (String.IsNullOrEmpty(filePath))
             {
-                string json = streamReader.ReadToEnd();
-                cards = JsonConvert.DeserializeObject<List<Card>>(json);
+                throw new ArgumentException(nameof(filePath), $"{nameof(filePath)} can not be null or empty");
             }
+
+            _jhelper = new JsonHelper(filePath);
+            _cards = _jhelper.Deserialize().ToList();
         }
 
         public void Add(Card card)
@@ -28,13 +30,14 @@ namespace Board.DAL
                 throw new ArgumentNullException(nameof(card));
             }
 
-            cards.Add(card);
+            _cards.Add(card);
+            _jhelper.Serialize(_cards);
         }
 
         public Card Find(int id)
         {
             UpdateJson();
-            Card card = cards.FirstOrDefault(x => x.Id == id);
+            Card card = _cards.FirstOrDefault(x => x.Id == id);
             if (card == null)
             {
                 throw new ArgumentException(nameof(id));
@@ -47,18 +50,19 @@ namespace Board.DAL
         {
             UpdateJson();
 
-            return cards;
+            return _cards;
         }
 
         public void Remove(int id)
         {
-            var index = cards.FindIndex(x => x.Id == id);
-            if (!cards.Any(x => x.Id == id))
+            var index = _cards.FindIndex(x => x.Id == id);
+            if (!_cards.Any(x => x.Id == id))
             {
                 throw new ArgumentException(nameof(id));
             }
 
-            cards.RemoveAt(index);
+            _cards.RemoveAt(index);
+            _jhelper.Serialize(_cards);
         }
 
         public void Update(Card card)
@@ -67,23 +71,14 @@ namespace Board.DAL
             {
                 throw new ArgumentNullException(nameof(card));
             }
-            if (!cards.Any(x => x.Id == card.Id))
+            if (!_cards.Any(x => x.Id == card.Id))
             {
                 throw new ArgumentException(nameof(card));
             }
 
-            var index = cards.FindIndex(x => x.Id == card.Id);
-            cards[index] = card;
-        }
-
-        private void UpdateJson()
-        {
-            using (StreamWriter streamWriter = new StreamWriter("DAL/users.json"))
-            using (JsonWriter writer = new JsonTextWriter(streamWriter))
-            {
-                JsonSerializer serializer = new JsonSerializer();
-                serializer.Serialize(writer, cards);
-            }
+            var index = _cards.FindIndex(x => x.Id == card.Id);
+            _cards[index] = card;
+            _jhelper.Serialize(_cards);
         }
     }
 }
