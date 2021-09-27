@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Sources\Icons\icon-add2.png" />
+    <None Remove="Sources\Icons\icon_del2.png" />
+    <None Remove="Sources\Icons\icon_load.png" />
+    <None Remove="Sources\Icons\icon_upd.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Sources\Icons\icon-add2.png" />
+    <Resource Include="Sources\Icons\icon_del2.png" />
+    <Resource Include="Sources\Icons\icon_load.png" />
+    <Resource Include="Sources\Icons\icon_upd.png" />
+  </ItemGroup>
+
+</Project>
