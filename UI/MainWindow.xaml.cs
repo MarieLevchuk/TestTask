@@ -28,22 +28,62 @@ namespace UI
         public MainWindow()
         {
             InitializeComponent();
+            ApiHelper.InintializeClient();
+        }
 
-            Cards = new ObservableCollection<Card>
+        private void ButtonAdd_Click(object sender, RoutedEventArgs e)
+        {
+            int id = Cards.Last<Card>().Id;
+            TaskWindow taskWindow = new TaskWindow(++id);
+            taskWindow.Show();
+            taskWindow.Closing += (sender, e) => LoadCards();
+        }
+        
+        private void ButtonUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedTitle = (e.OriginalSource as FrameworkElement);
+            var s = (selectedTitle.Parent as FrameworkElement).Parent as FrameworkElement;
+            string currentTitle = (s.FindName("textTitle") as TextBlock).Text;
+            Card cardToUpdate = Cards.FirstOrDefault(x => x.Title.Equals(currentTitle, StringComparison.OrdinalIgnoreCase));
+            
+            TaskWindow taskWindow = new TaskWindow(cardToUpdate);
+            taskWindow.Show();
+            taskWindow.Closing += (sender, e) => LoadCards();
+        }
+
+        private void ButtonDelete_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedTitle = (e.OriginalSource as FrameworkElement);
+            var s = (selectedTitle.Parent as FrameworkElement).Parent as FrameworkElement;
+            string currentTitle = (s.FindName("textTitle") as TextBlock).Text;
+            int cardToDeleteId = Cards.FirstOrDefault(x => x.Title.Equals(currentTitle, StringComparison.OrdinalIgnoreCase)).Id;
+
+            DeleteCard(cardToDeleteId);
+        }
+
+        private async void DeleteCard(int id)
+        {
+            bool result = await CardsProcessor.Delete(id);
+            if (result)
             {
-                new Card {Id=1, Title="Fathers and Sons", CoverPath="C:/temp/fathers.jpg"},
-                new Card {Id=2, Title="Roadside picnic", CoverPath="C:/temp/picnic.jpg"},
-                new Card {Id=3, Title="The glass bead game", CoverPath="C:/temp/game.jpg"},
-                new Card {Id=4, Title="Three comrades", CoverPath="C:/temp/three.jpg"},
-                new Card {Id=5, Title="The lord of the rings", CoverPath="C:/temp/lord.jpg"}
-            };
+                MessageBox.Show("The card was removed");
+                await LoadCards();
+            }
+            else
+            {
+                MessageBox.Show("Error");
+            }
+        }
+
+        private async Task LoadCards()
+        {
+            Cards = await CardsProcessor.Load();
             cardsList.ItemsSource = Cards;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            TaskWindow taskWindow = new TaskWindow();
-            taskWindow.Show();
+            await LoadCards();
         }
     }
 }

@@ -1,1 +1,37 @@
-[{"Id":1,"Title":"Fathers and Sons","CoverPath":"fathers.jpg"},{"Id":2,"Title":"Roadside picnic","CoverPath":"picnic.jpg"},{"Id":3,"Title":"The glass bead game","CoverPath":"game.jpg"},{"Id":4,"Title":"Three comrades","CoverPath":"three.jpg"},{"Id":5,"Title":"The lord of the rings","CoverPath":"lord.jpg"}]
+[
+  {
+    "Id": 2,
+    "Title": "Roadside picnic",
+    "CoverPath": "C:/picnic.jpg"
+  },
+  {
+    "Id": 3,
+    "Title": "The glass bead game",
+    "CoverPath": "C:/temp/game.jpg"
+  },
+  {
+    "Id": 4,
+    "Title": "Three comrades",
+    "CoverPath": "C:/temp/three.jpg"
+  },
+  {
+    "Id": 5,
+    "Title": "The lord of the rings",
+    "CoverPath": "C:/temp/lord.jpg"
+  },
+  {
+    "Id": 1,
+    "Title": "The Gold-Bug",
+    "CoverPath": "file:///C:/temp/gold.jpg"
+  },
+  {
+    "Id": 8,
+    "Title": "Fathers and sons",
+    "CoverPath": "file:///C:/temp/fathers.jpg"
+  },
+  {
+    "Id": 9,
+    "Title": "Sonets",
+    "CoverPath": "file:///C:/temp/sonnets.jpg"
+  }
+]
